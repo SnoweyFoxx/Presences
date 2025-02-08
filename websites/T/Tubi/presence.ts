@@ -1,5 +1,5 @@
 const presence = new Presence({
-		clientId: "937290941285429311",
+		clientId: "1337897777283469342",
 	}),
 	browingTimestamp = Math.floor(Date.now() / 1000);
 async function getStrings() {

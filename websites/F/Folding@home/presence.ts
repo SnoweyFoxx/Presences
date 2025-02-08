@@ -1,5 +1,5 @@
 const presence = new Presence({
-	clientId: "812025934617509949",
+	clientId: "1337897215397593170",
 });
 
 let points: string, progress: string;

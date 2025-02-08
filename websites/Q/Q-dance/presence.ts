@@ -1,5 +1,5 @@
 const presence = new Presence({
-		clientId: "844107169205190686",
+		clientId: "1337897311409537024",
 	}),
 	elapsed = Math.floor(Date.now() / 1000);
 

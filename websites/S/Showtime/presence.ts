@@ -1,5 +1,5 @@
 const presence = new Presence({
-	clientId: "844107447933075498",
+	clientId: "1337897461103984722",
 });
 
 async function getStrings() {

@@ -1,86 +1,54 @@
-const presence = new Presence({
-	clientId: "843058220398542878",
-});
+const presence = new Presence({ clientId: "1337589059156967425" });
 
 presence.on("UpdateData", async () => {
 	const presenceData: PresenceData = {
-		largeImageKey:
-			"https://cdn.rcd.gg/PreMiD/websites/S/SiriusXM/assets/logo.jpg",
+		largeImageKey: "https://i.imgur.com/LXE2BOi.png",
 	};
 
-	switch (document.location.pathname) {
-		case "/home/foryou": {
-			presenceData.details = "Viewing SiriusXM Home";
-			break;
-		}
-		case "/home/music": {
-			presenceData.details = "Viewing Music Home";
-			break;
-		}
-		case "/home/sports": {
-			presenceData.details = "Viewing Sports Home";
-			break;
-		}
-		case "/home/news": {
-			presenceData.details = "Viewing News Home";
-			break;
-		}
-		case "/home/entertainment": {
-			presenceData.details = "Viewing Talk Home";
-			break;
-		}
-		case "/home/howard": {
-			presenceData.details = "Viewing Howard Stern Home";
-			break;
-		}
-		case "/favorites/channels": {
-			presenceData.details = "Viewing Favorite Channels";
-			break;
-		}
-		case "/favorites/shows": {
-			presenceData.details = "Viewing Favorite Shows";
-			break;
-		}
-		case "/favorites/episodes": {
-			presenceData.details = "Viewing Favorite Episodes";
-			break;
-		}
-		case "/recently-played": {
-			presenceData.details = "Viewing Recently Played Stations";
-			break;
-		}
-		case "/query": {
-			presenceData.details = "Searching SiriusXM";
-			break;
-		}
-		default:
-			if (document.location.pathname.includes("/query")) {
-				presenceData.details = "Viewing: ";
-				presenceData.state = document.querySelector<HTMLInputElement>(
-					'[name="searchText"]'
-				).value;
-			} else if (document.location.pathname.includes("/category-listing")) {
-				presenceData.details = "Viewing Category: ";
-				presenceData.state = document.querySelector(
-					"span.sxm-breadcrumb__text"
-				).textContent;
-			} else presenceData.details = "Unknown page";
-	}
-
-	if (document.querySelector(".sxm-player-controls.no-select")) {
+	if (document.querySelector('[aria-label="Pause"]')) {
 		const data = {
-			channel: document.querySelector(".channel-name")?.textContent,
-			track: document.querySelector(".track-name")?.textContent ?? "Loading",
-			artist: document.querySelector(".artist-name")?.textContent ?? "Loading",
+			channel: document.querySelector("div.styles-module__text___xT9yv")
+				?.textContent,
+			track:
+				document.querySelector("div.styles-module__title___D3wQt")
+					?.textContent ?? "Loading",
 		};
-
-		if (data.track === data.artist) presenceData.details = data.track;
-		else if (data.channel)
-			presenceData.details = `${data.track} - ${data.artist}`;
-		else presenceData.details = data.track;
-
-		if (data.channel) presenceData.state = data.channel;
-		else presenceData.state = data.artist;
+		if (
+			document.querySelector("div.ScrubberSidebar-module__live___olTao")
+				.textContent
+		) {
+			const imageElement = document.querySelector<HTMLImageElement>(
+				"span.image-module__image___v0MU3 image-module__image--align-center___Sfx0W image-module__image--aspect-auto___q0e7P image-module__image--display-inline___DS1oW image-module__image--fit-none___JNDXW image-module__image--justify-center___LwZt4 image-module__image--radius-small___3tcEX image-module__image--shape-rectangle___61oi- image-module__image--size-full___29q-k" +
+					"> span.image-module__image-container___tpidl " +
+					"> span.image-module__image-outer___Kl-YN " +
+					"> span.image-module__image-inner___rZWHj " +
+					"> img.image-module__image-image___WKoaX"
+			);
+			presenceData.largeImageKey = imageElement.src;
+			presenceData.smallImageKey = Assets.Play;
+			presenceData.details = data.track;
+			presenceData.state = data.channel;
+		} else {
+			const footerImageElement = document.querySelector<HTMLImageElement>(
+				".BaseLayout-module__footer___TLKLc"
+			);
+			presenceData.largeImageKey = footerImageElement?.src;
+			presenceData.smallImageKey = Assets.Play;
+			presenceData.details = data.track;
+			presenceData.state = data.channel;
+		}
+	} else if (document.querySelector('[aria-label="Play"]')) {
+		switch (document.location.pathname) {
+			case "/player/home":
+				presenceData.details = "Viewing SiriusXM Home";
+				break;
+			case "/player/curated-grouping":
+				presenceData.details = "Viewing:";
+				presenceData.state = document.querySelector(
+					"div.CuratedGroupingHeader-module__CuratedGroupingHeaderHeadline___hezgw"
+				)?.textContent;
+				break;
+		}
 	}
 
 	if (presenceData.details) presence.setActivity(presenceData);
